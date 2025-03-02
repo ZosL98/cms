@@ -46,7 +46,6 @@
         <th scope="col">View full post</th>
 
 <?php
-    // CONTINUE HERE <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     if ($stm = $connect->prepare('SELECT * FROM posts')) {
         $stm->execute();
         $result = $stm->get_result();
