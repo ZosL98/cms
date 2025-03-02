@@ -5,17 +5,28 @@
     secure();
     include('includes/header.php');
 
+    if (isset($_POST['data']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
+        $query = mysqli_query($connect ,"UPDATE posts SET Image = null WHERE id = '$_GET[id]'");
+    }
+
     if (isset($_POST['title'])) {
         if($stm = $connect->prepare('UPDATE posts SET title = ?, content = ?, date = ? WHERE id = ?')) {
-            $hashed = sha1($_POST['password']);
+
+            if(isset($_FILES['image'])) {
+                $folder = "uploads/";
+                $target = $folder . basename($_FILES['image']['name']);
+                $basename = basename($_FILES['image']['name']);
+                move_uploaded_file($_FILES["image"]["tmp_name"], $target);
+
+                $query = mysqli_query($connect ,"UPDATE posts SET Image = '$basename' WHERE id = $_GET[id]");
+            }
+
             $stm->bind_param('sssi', $_POST['title'], $_POST['content'], $_POST['date'], $_GET['id']);
             $stm->execute();
 
             set_message("A user " . $_GET['id'] . " has been updated");
 
             $stm->close();
-
-
 
                 set_message("A user " . $_GET['id'] . " has been updated");
                 header('location: posts.php');
@@ -35,11 +46,7 @@
             $result = $stm->get_result();
             $post = $result->fetch_assoc();
 
-            var_dump($user);
-
             if($post) {
-
-
 ?>
 
     <div class="container mt-5">
@@ -47,7 +54,7 @@
             <div class="col-md-6">
             <h1 class="display-1">Edit post</h1>
 
-            <form method="post">
+            <form method="post" enctype="multipart/form-data">
 
             <!-- title input -->
             <div data-mdb-input-init class="form-outline mb-4">
@@ -67,6 +74,19 @@
                 <label class="form-label" for="date">Date</label>
             </div>
 
+            <?php
+                if (!empty($post['Image'])) {
+            ?>
+                <p>
+                    <button id="removeImage" name="removeImage" class="btn btn-danger btn-block">Remove Image</button>
+                </p>
+
+            <?php } else {?>
+                <div class="mb-3">
+                    <label for="formFile" class="form-label">Add image</label>
+                    <input class="form-control" type="file" id="formFile" name="image">
+                </div>
+            <?php } ?>
             <!-- Submit button -->
             <button data-mdb-ripple-init type="submit" class="btn btn-primary btn-block">Edit post</button>
             </form>
@@ -80,6 +100,18 @@
         tinymce.init({
             selector: '#content'
         })
+
+        var removeImageButton = document.querySelector("#removeImage");
+        removeImageButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            $.post(window.location.href, {
+                data: removeImageButton.id
+            }, function() {
+                alert('Image was successfully removed')
+            })
+        })
+
+
     </script>
 
 
