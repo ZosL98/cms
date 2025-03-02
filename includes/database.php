@@ -6,3 +6,13 @@
        }
 
 ?>
+
+
+<?php
+       // $connect = mysqli_connect('mysql.db.mdbgo.com', 'zosl98_cmsdb', 'Podlaga55#', 'zosl98_cmsdb');
+
+       // if(mysqli_connect_errno()) {
+       //  exit('failed to connect to MySQL');
+       // }
+
+?>
