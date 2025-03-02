@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gostitelj: 127.0.0.1
--- Čas nastanka: 25. feb 2025 ob 10.18
+-- Čas nastanka: 02. mar 2025 ob 21.11
 -- Različica strežnika: 10.4.28-MariaDB
 -- Različica PHP: 8.2.4
 
@@ -33,16 +33,18 @@ CREATE TABLE `posts` (
   `content` text NOT NULL,
   `author` int(11) NOT NULL,
   `date` date NOT NULL,
-  `added` datetime NOT NULL DEFAULT current_timestamp()
+  `added` datetime NOT NULL DEFAULT current_timestamp(),
+  `Image` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Odloži podatke za tabelo `posts`
 --
 
-INSERT INTO `posts` (`id`, `title`, `content`, `author`, `date`, `added`) VALUES
-(1, 'New title', '<p>Some content dwasd</p>', 1, '2025-01-30', '2025-01-31 13:40:38'),
-(2, 'My second post', '<p>we <strong>can </strong>do a lot here</p>\r\n<p>&nbsp;</p>\r\n<p>Adjust</p>', 6, '2025-01-31', '2025-01-31 14:05:04');
+INSERT INTO `posts` (`id`, `title`, `content`, `author`, `date`, `added`, `Image`) VALUES
+(1, 'New title', '<p>Some content dwasd</p>', 1, '2025-01-30', '2025-01-31 13:40:38', NULL),
+(2, 'My second post123', '<p>we <strong>can </strong>do a lot here..</p>\r\n<p>&nbsp;</p>\r\n<p>Adjust</p>', 6, '2025-01-31', '2025-01-31 14:05:04', 'RZ7nfx.jpg'),
+(20, 'My Title', '<p>Content with image</p>', 6, '2025-03-02', '2025-03-02 15:03:12', 'video-game-daxter-wallpaper-preview.jpg');
 
 -- --------------------------------------------------------
 
@@ -93,7 +95,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT tabele `posts`
 --
 ALTER TABLE `posts`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT tabele `users`
