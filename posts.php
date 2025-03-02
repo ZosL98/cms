@@ -40,17 +40,20 @@
                         <th>Title</th>
                         <th>Author's ID</th>
                         <th>Content</th>
+                        <th>Added</th>
                         <th>Edit | Delete</th>
                     </tr>
                     <?php
-                        while($record = mysqli_fetch_assoc($result)) {?>
+                        while($record = mysqli_fetch_assoc($result)) { ?>
                         <tr>
                             <td> <?php echo $record['id']; ?> </td>
                             <td> <?php echo $record['title']; ?> </td>
                             <td> <?php echo $record['author']; ?> </td>
-                            <td> <?php echo $record['content']; ?> </td>
-                            <td><a href="posts_edit.php?id=<?php echo $record['id']; ?>">Edit</a>
-                            <a href="posts.php?delete=<?php echo $record['id']; ?>">Delete</a></td>
+                            <td> <?php echo $record['content']; ?> <img src="<?php if(!empty($record['Image'])) {echo 'uploads/' . $record['Image'];}; ?>" width="200px" /> </td>
+                            <td> <?php echo $record['added']; ?> </td>
+                            <td>
+                                <a href="posts_edit.php?id=<?php echo $record['id']; ?>">Edit </a><a href="posts.php?delete=<?php echo $record['id']; ?>">Delete</a>
+                            </td>
                         </tr>
                             
                         <?php } ?>

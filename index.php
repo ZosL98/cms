@@ -2,7 +2,6 @@
     include('includes/database.php');
     include('includes/functions.php');
     include('includes/config.php');
-
     include('includes/header.php');
 
     // just to make sure user cannot go back to login by clicking home if he is already logged in
@@ -20,19 +19,17 @@
             $result = $stm->get_result();
             $user = $result->fetch_assoc();
 
-            var_dump($user);
-
-                // if user successfully logged in
             if($user) {
                 $_SESSION['id'] = $user['id'];
                 $_SESSION['email'] = $user['email'];
                 $_SESSION['username'] = $user['username'];
 
-                // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                 set_message("You have succesfully logged in " . $_SESSION['username']);
                 header('location: dashboard.php');
                 die();
             }
+
+            echo '<div class="alert alert-danger" role="alert">Wrong username or password!</div>';
 
             $stm->close();
         } else {
@@ -41,6 +38,34 @@
     }
 
 ?>
+
+    <h1>Posts</h1>
+
+    <table class="table table-dark table-hover">
+        <th scope="col">Title</th>
+        <th scope="col">View full post</th>
+
+<?php
+    // CONTINUE HERE <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    if ($stm = $connect->prepare('SELECT * FROM posts')) {
+        $stm->execute();
+        $result = $stm->get_result();
+
+        while($row = mysqli_fetch_array($result)) {
+
+?>
+
+            <tr>
+                <td><?php echo $row['title'] ?></td>
+                <td><a href="view.php?id=<?php echo $row['id'] ?>">View</a></td>
+            </tr>
+
+<?php
+        }
+    }
+?>
+
+</table>
 
 <div class="container mt-5">
     <div class="row justify-content-center">
