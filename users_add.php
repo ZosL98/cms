@@ -6,19 +6,7 @@
     include('includes/header.php');
 
     if (isset($_POST['username'])) {
-        if($stm = $connect->prepare('INSERT INTO users(username, email, password, active) VALUES(?, ?, ?, ?)')) {
-            $hashed = sha1($_POST['password']);
-            $stm->bind_param('ssss', $_POST['username'], $_POST['email'], $hashed, $_POST['active']);
-            $stm->execute();
-
-            set_message("A new user " . $_SESSION['username'] . " has been added");
-            header('location: users.php');
-            die();
-
-            $stm->close();
-        } else {
-            echo 'could not prepare statement';
-        }
+        users_add($_POST['username'], $_POST['email'], $_POST['password'], $_POST['active']);
     }
 
 ?>
