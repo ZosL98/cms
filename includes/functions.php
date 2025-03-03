@@ -50,7 +50,7 @@
         global $connect;
         if($stm = $connect->prepare('INSERT INTO users(username, email, password, active) VALUES(?, ?, ?, ?)')) {
             $hashed = sha1($_POST['password']);
-            $stm->bind_param('ssss', $_POST['username'], $_POST['email'], $hashed, $_POST['active']);
+            $stm->bind_param('ssss', $username, $email, $password, $active);
             $stm->execute();
 
             set_message("A new user " . $_SESSION['username'] . " has been added");
