@@ -6,34 +6,7 @@
     include('includes/header.php');
 
     if (isset($_POST['username'])) {
-        if($stm = $connect->prepare('UPDATE users SET username = ?, email = ?, active = ? WHERE id = ?')) {
-            $hashed = sha1($_POST['password']);
-            $stm->bind_param('sssi', $_POST['username'], $_POST['email'], $_POST['active'], $_GET['id']);
-            $stm->execute();
-
-            set_message("A user " . $_GET['id'] . " has been updated");
-
-            $stm->close();
-
-            if (isset($_POST['password'])) {
-                if($stm = $connect->prepare('UPDATE users SET password = ? WHERE id = ?')) {
-                    $hashed = sha1($_POST['password']);
-                    $stm->bind_param('si', $hashed, $_GET['id']);
-                    $stm->execute();
-                } else {
-                    echo 'could not prepare statement';
-                }
-        
-                set_message("A user " . $_GET['id'] . " has been updated");
-                header('location: users.php');
-                die();
-                
-
-            } else {
-                echo 'could not prepare statement';
-            }
-        }
-
+        user_edit($_POST['username'], $_POST['email'], $_POST['active'], $_GET['id']);
     }
 
     if (isset($_GET['id'])) {

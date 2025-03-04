@@ -10,31 +10,7 @@
     }
 
     if (isset($_POST['title'])) {
-        if($stm = $connect->prepare('UPDATE posts SET title = ?, content = ?, date = ? WHERE id = ?')) {
-
-            if(isset($_FILES['image'])) {
-                $folder = "uploads/";
-                $target = $folder . basename($_FILES['image']['name']);
-                $basename = basename($_FILES['image']['name']);
-                move_uploaded_file($_FILES["image"]["tmp_name"], $target);
-
-                $query = mysqli_query($connect ,"UPDATE posts SET Image = '$basename' WHERE id = $_GET[id]");
-            }
-
-            $stm->bind_param('sssi', $_POST['title'], $_POST['content'], $_POST['date'], $_GET['id']);
-            $stm->execute();
-
-            set_message("A user " . $_GET['id'] . " has been updated");
-
-            $stm->close();
-
-                set_message("A user " . $_GET['id'] . " has been updated");
-                header('location: posts.php');
-                die();
-
-            } else {
-                echo 'could not prepare post statement';
-            }
+            post_edit($_POST['title'], $_POST['content'], $_POST['date'], $_GET['id']);
         }
 
 
