@@ -62,4 +62,65 @@
             echo 'could not prepare statement';
         }
     }
+
+
+    function post_edit($title, $content, $date, $id) {
+        global $connect;
+        if($stm = $connect->prepare('UPDATE posts SET title = ?, content = ?, date = ? WHERE id = ?')) {
+
+            if(isset($_FILES['image'])) {
+                $folder = "uploads/";
+                $target = $folder . basename($_FILES['image']['name']);
+                $basename = basename($_FILES['image']['name']);
+                move_uploaded_file($_FILES["image"]["tmp_name"], $target);
+
+                $query = mysqli_query($connect ,"UPDATE posts SET Image = '$basename' WHERE id = $_GET[id]");
+            }
+
+            $stm->bind_param('sssi', $title, $content, $date, $id);
+            $stm->execute();
+
+            set_message("A user " . $_GET['id'] . " has been updated");
+
+            $stm->close();
+
+                set_message("A user " . $_GET['id'] . " has been updated");
+                header('location: posts.php');
+                die();
+
+            } else {
+                echo 'could not prepare post statement';
+            }
+    }
+
+    function user_edit($username, $email, $active, $id) {
+        global $connect;
+        if($stm = $connect->prepare('UPDATE users SET username = ?, email = ?, active = ? WHERE id = ?')) {
+            $hashed = sha1($_POST['password']);
+            $stm->bind_param('sssi', $username, $email, $active, $id);
+            $stm->execute();
+
+            set_message("A user " . $_GET['id'] . " has been updated");
+
+            $stm->close();
+
+            if (isset($_POST['password'])) {
+                if($stm = $connect->prepare('UPDATE users SET password = ? WHERE id = ?')) {
+                    $hashed = sha1($_POST['password']);
+                    $stm->bind_param('si', $hashed, $_GET['id']);
+                    $stm->execute();
+                } else {
+                    echo 'could not prepare statement';
+                }
+        
+                set_message("A user " . $_GET['id'] . " has been updated");
+                header('location: users.php');
+                die();
+                
+
+            } else {
+                echo 'could not prepare statement';
+            }
+        }
+    }
 ?>
