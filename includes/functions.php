@@ -29,8 +29,13 @@
                 move_uploaded_file($_FILES["image"]["tmp_name"], $target);
             }
         } else {
-            header('Location:' . $_SERVER['PHP_SELF'] . '?message=File is not type jpg or png');
-            die();
+            if(isset($_GET['id'])) {
+                header('Location:' . $_SERVER['PHP_SELF'] . "?id=" . $_GET['id'] . '&message=File is not type jpg or png');
+                die();
+            } else {
+                header('Location:' . $_SERVER['PHP_SELF'] . '?message=File is not type jpg or png');
+                die();
+            }
         }
     }
 
