@@ -20,16 +20,35 @@
     }
     
 
+    function image_upload($target) {
+        if ($_FILES['image']['type'] === 'image/png' || $_FILES['image']['type'] === 'image/jpeg') {
+            if ($_FILES['image']['size'] > 500000) {
+                header('Location:' . $_SERVER['PHP_SELF'] . '?message=Image is too large');
+                die();
+            } else {
+                move_uploaded_file($_FILES["image"]["tmp_name"], $target);
+            }
+        } else {
+            header('Location:' . $_SERVER['PHP_SELF'] . '?message=File is not type jpg or png');
+            die();
+        }
+    }
+
+
     function post_add($title, $content, $author, $date, $image) {
         global $connect;
         if($stm = $connect->prepare('INSERT INTO posts(title, content, author, date, Image) VALUES(?, ?, ?, ?, ?)')) {
 
+
             if(isset($_FILES['image'])) {
                 $folder = "uploads/";
                 $target = $folder . basename($_FILES['image']['name']);
+                $basename = basename($_FILES['image']['name']);
 
-                move_uploaded_file($_FILES["image"]["tmp_name"], $target);
+                image_upload($target);
+
             }
+
 
             $stm->bind_param('ssiss', $title, $content, $author, $date, $image);
             $stm->execute();
@@ -72,9 +91,13 @@
                 $folder = "uploads/";
                 $target = $folder . basename($_FILES['image']['name']);
                 $basename = basename($_FILES['image']['name']);
-                move_uploaded_file($_FILES["image"]["tmp_name"], $target);
+                
+                image_upload($target);
 
-                $query = mysqli_query($connect ,"UPDATE posts SET Image = '$basename' WHERE id = $_GET[id]");
+                if ($x = $connect->prepare("UPDATE posts SET Image = ? WHERE id = ?")) {
+                    $x->bind_param('si', $basename, $id);
+                    $x->execute();
+                }
             }
 
             $stm->bind_param('sssi', $title, $content, $date, $id);

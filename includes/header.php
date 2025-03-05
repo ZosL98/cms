@@ -51,4 +51,9 @@
 </nav>
 
 <?php get_messsage(); ?>
+<?php
+  if (isset($_GET['message'])) {
+    echo "<p>" . $_GET['message'] . "</p><hr>";
+  }
+?>
     
