@@ -6,7 +6,7 @@
     include('includes/header.php');
 
     if (isset($_POST['username'])) {
-        user_edit($_POST['username'], $_POST['email'], $_POST['active'], $_GET['id']);
+        user_edit($_POST['username'], $_POST['email'], $_POST['password'], $_POST['active'], $_GET['id']);
     }
 
     if (isset($_GET['id'])) {
@@ -16,8 +16,6 @@
 
             $result = $stm->get_result();
             $user = $result->fetch_assoc();
-
-            var_dump($user);
 
 
 ?>

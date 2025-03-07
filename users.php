@@ -6,18 +6,7 @@
     include('includes/header.php');
 
     if(isset($_GET['delete'])) {
-        if($stm = $connect->prepare('DELETE FROM users WHERE id = ?')) {
-            $stm->bind_param('i', $_GET['delete']);
-            $stm->execute();
-
-            set_message("User with id: " . $_GET['delete'] . " has been deleted");
-            header('location: users.php');
-            die();
-
-            $stm->close();
-        } else {
-            echo 'could not prepare statement';
-        }
+        delete($_GET['delete'], "User with id: $_GET[delete] has been deleted", 'location: users.php', 'DELETE FROM users WHERE id = ?');
     }
 
     if($stm = $connect->prepare('SELECT * FROM users')) {

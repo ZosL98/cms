@@ -10,31 +10,10 @@
         die();
     }
 
+
+
     if (isset($_POST['email']) && isset($_POST['password'])) {
-        if($stm = $connect->prepare('SELECT * FROM users WHERE email = ? AND password = ? AND active = 1')) {
-            $hashed = sha1($_POST['password']);
-            $stm->bind_param('ss', $_POST['email'], $hashed);
-            $stm->execute();
-
-            $result = $stm->get_result();
-            $user = $result->fetch_assoc();
-
-            if($user) {
-                $_SESSION['id'] = $user['id'];
-                $_SESSION['email'] = $user['email'];
-                $_SESSION['username'] = $user['username'];
-
-                set_message("You have succesfully logged in " . $_SESSION['username']);
-                header('location: dashboard.php');
-                die();
-            }
-
-            echo '<div class="alert alert-danger" role="alert">Wrong username or password!</div>';
-
-            $stm->close();
-        } else {
-            echo 'could not prepare statement';
-        }
+        index($_POST['email'], $_POST['password']);
     }
 
 ?>

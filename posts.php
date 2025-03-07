@@ -5,19 +5,10 @@
     secure();
     include('includes/header.php');
 
+
+
     if(isset($_GET['delete'])) {
-        if($stm = $connect->prepare('DELETE FROM posts WHERE id = ?')) {
-            $stm->bind_param('i', $_GET['delete']);
-            $stm->execute();
-
-            set_message("A post with id: " . $_GET['delete'] . " has been deleted");
-            header('location: posts.php');
-            die();
-
-            $stm->close();
-        } else {
-            echo 'could not prepare statement';
-        }
+        delete($_GET['delete'], "A post with id: $_GET[delete] has been deleted", 'location: posts.php', 'DELETE FROM posts WHERE id = ?');
     }
 
     if($stm = $connect->prepare('SELECT * FROM posts')) {
